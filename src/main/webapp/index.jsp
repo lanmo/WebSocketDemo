@@ -7,9 +7,9 @@
 		<title>简单聊天室</title>
 		<script type="text/javascript">
 			var room = {
-				connect : function() {
-					var location = "ws://localhost:8080/ws/servlet/chat";
-					this.ws = new WebSocket(this.location);
+				connect : function(username) {
+					var location = "ws://localhost:8080/ws/servlet/chat?username=" + username;
+					this.ws = new WebSocket(location);
 					this.ws.onopen = this.onopen;
 					this.ws.onclose = this.onclose;
 					this.ws.onmessage = this.onmessage;
@@ -19,21 +19,42 @@
 				},
 				onopen : function(evt) {
 					//建立连接
-					console.log(evt+"建立连接。。。。。。。。");
+					console.log(this);
+					console.log("建立连接。。。。。。。。。。。");
 				},
 				onclose : function(evt) {
 					//关闭连接
 					this.ws = null;
-					console.log(evt+"关闭连接。。。。。。。。");
+					console.log("关闭连接。。。。。。。。");
+					console.log(this);
 				},
 				onerror : function(evt) {
 					//错误处理
-					console.log(evt+"错误处理。。。。。。。。");
+					console.log("错误处理。。。。。。。。");
+					console.log(this);
 				},
 				onmessage : function(evt) {
 					//接收消息
 					var data = evt.data;
-					console.log(evt+"接收消息。。。。。。。。");
+					
+					if(data == "connect") {
+						roomChat.onsend("connect");
+						return;
+					}
+					console.log(data+","+ this.ws);
+					if(data.indexOf("join") > -1) {
+						var usernames = data.split(",");
+						var html = "";
+						for(var i=1; i<usernames.length; ++i) {
+							html = usernames[i] + "   加入了聊天室............" + "<br/>";
+						}
+						
+						$("room").innerHTML += html;
+						
+					} else {
+						var mess = data.split(",");
+						$("message").innerHTML += mess[0] +":"+ "<br/>   " + mess[1] + "<br/>";
+					}
 				},
 				onsend : function(message) {
 					this.ws.send(message);
@@ -41,24 +62,25 @@
 				
 			};
 			
-		</script>
-		
-		<script type="text/javascript">
-		
-			var room;
+			var roomChat;
 			function send() {
-				$("bjoin").disable = true;
+				$("bjoin").disabled = true;
+				$("bsend").disabled = false;
 				var msg = $("mext").value;
-				room.send(msg);
+				roomChat.onsend(msg);
+				$("mext").value = '';
 			}
 			
 			function join() {
-				$("bsend").disable = true;
-				room = room.connect();
+				$("bsend").disabled = false;
+				$("bjoin").disabled = true;
+				var username = $("mext").value;
+				roomChat = room.connect(username);
+				$("mext").value = '';
 			}
 			
 			function $(id) {
-				return document.getElementByid(id);
+				return document.getElementById(id);
 			}
 		</script>
 	</head>
