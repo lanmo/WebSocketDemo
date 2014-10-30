@@ -4,4 +4,16 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <servlet>
+    <servlet-name>WSChat</servlet-name>
+    <servlet-class>com.yn.websocket.WebSocketChatServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>WSChat</servlet-name>
+    <url-pattern>/ws/servlet/*</url-pattern>
+  </servlet-mapping>
+  
+  <welcome-file-list>
+  	<welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
 </web-app>
