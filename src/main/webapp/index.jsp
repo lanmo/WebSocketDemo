@@ -41,7 +41,7 @@
 						roomChat.onsend("connect");
 						return;
 					}
-					console.log(data+","+ this.ws);
+					console.log(this);
 					if(data.indexOf("join") > -1) {
 						var usernames = data.split(",");
 						var html = "";
