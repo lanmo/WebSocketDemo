@@ -6,6 +6,8 @@
 		<meta charset="utf-8">
 		<title>简单聊天室</title>
 		<script type="text/javascript">
+			var wsStatus;
+			
 			var room = {
 				connect : function(username) {
 					var location = "ws://localhost:8080/ws/servlet/chat?username=" + username;
@@ -21,43 +23,43 @@
 					//建立连接
 					console.log(this);
 					console.log("建立连接。。。。。。。。。。。");
+					wsStatus = WebSocket.OPEN;
 				},
 				onclose : function(evt) {
 					//关闭连接
 					this.ws = null;
 					console.log("关闭连接。。。。。。。。");
 					console.log(this);
+					wsStatus = WebSocket.CLOSE;
 				},
 				onerror : function(evt) {
 					//错误处理
 					console.log("错误处理。。。。。。。。");
 					console.log(this);
+					wsStatus = -1;
 				},
 				onmessage : function(evt) {
 					//接收消息
 					var data = evt.data;
-					
-					if(data == "connect") {
-						roomChat.onsend("connect");
-						return;
-					}
-					console.log(this);
 					if(data.indexOf("join") > -1) {
 						var usernames = data.split(",");
 						var html = "";
+						console.log("data:"+usernames.length);
 						for(var i=1; i<usernames.length; ++i) {
-							html = usernames[i] + "   加入了聊天室............" + "<br/>";
+							html += usernames[i] + "   加入了聊天室............" + "<br/>";
 						}
-						
-						$("room").innerHTML += html;
+
+						$("room").innerHTML = html;
 						
 					} else {
 						var mess = data.split(",");
-						$("message").innerHTML += mess[0] +":"+ "<br/>   " + mess[1] + "<br/>";
+						$("message").innerHTML += mess[0] +":"+ "<br/>  &nbsp;&nbsp;" + mess[1] + "<br/>";
 					}
 				},
 				onsend : function(message) {
-					this.ws.send(message);
+						if(wsStatus === WebSocket.OPEN) {
+							this.ws.send(message);
+						}
 				} 
 				
 			};
@@ -87,13 +89,15 @@
 	<body>
 		<header>简单聊天室......................</header>
 		<div id="message" style="height: 250px;width: 480px;background-color: red;float: left;">
+			<div style="height: 20px;width:90%; border: 1px solid white;" >abc</div>
+			<div style="height: 20px;border: 1px solid white;" >ddsa</div>
 		</div>
 		
 		<div id="room" style="height: 250px;width: 200px;background-color: green;float: left;">
 		</div>
 		
 		<div id="send" style="height: 30px;width: 680px;background-color: green;clear: left;">
-			<input id="mext" size="110"/>
+			<input id="mext" size="70"/>
 			<input type="button" value="发送" disabled="disabled" id="bsend" onclick="send()"/>
 			<input type="button" value="Join" onclick="join()" id="bjoin" />
 		</div>
