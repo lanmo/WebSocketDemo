@@ -54,8 +54,14 @@ public class ChatWebSocket implements OnTextMessage{
 
 	public void onMessage(String message) {
 		
+		if(message.equals("heartbeat"))  {
+			Log.log("心跳", username);
+			return;
+		}
+		
 		Map<String, ChatWebSocket> map = ChatMessageUtil.getRooms();
 		for(Entry<String, ChatWebSocket> entry : map.entrySet()) {
+			
 			StringBuffer sb = new StringBuffer();
 			 ChatWebSocket socket = entry.getValue(); 
 			 sb.append(username).append(",").append(message);

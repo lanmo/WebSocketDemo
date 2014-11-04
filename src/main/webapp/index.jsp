@@ -7,9 +7,12 @@
 		<title>简单聊天室</title>
 		<script type="text/javascript">
 			var wsStatus;
+			var user;
+			var t;
 			
 			var room = {
 				connect : function(username) {
+					user = username;
 					var location = "ws://localhost:8080/ws/servlet/chat?username=" + username;
 					this.ws = new WebSocket(location);
 					this.ws.onopen = this.onopen;
@@ -24,6 +27,7 @@
 					console.log(this);
 					console.log("建立连接。。。。。。。。。。。");
 					wsStatus = WebSocket.OPEN;
+					t = setTimeout(heartbeat, 15000);
 				},
 				onclose : function(evt) {
 					//关闭连接
@@ -31,12 +35,18 @@
 					console.log("关闭连接。。。。。。。。");
 					console.log(this);
 					wsStatus = WebSocket.CLOSE;
+					if(t) {
+						clearTimeout(t);
+					}
 				},
 				onerror : function(evt) {
 					//错误处理
 					console.log("错误处理。。。。。。。。");
 					console.log(this);
 					wsStatus = -1;
+					if(t) {
+						clearTimeout(t);
+					}
 				},
 				onmessage : function(evt) {
 					//接收消息
@@ -46,14 +56,26 @@
 						var html = "";
 						console.log("data:"+usernames.length);
 						for(var i=1; i<usernames.length; ++i) {
-							html += usernames[i] + "   加入了聊天室............" + "<br/>";
+							if(usernames[i] === user) {
+								html += usernames[i] + "(我)   加入了聊天室............" + "<br/>";	
+							} else {
+								html += usernames[i] + "   加入了聊天室............" + "<br/>";
+							}
 						}
 
 						$("room").innerHTML = html;
 						
 					} else {
 						var mess = data.split(",");
-						$("message").innerHTML += mess[0] +":"+ "<br/>  &nbsp;&nbsp;" + mess[1] + "<br/>";
+						var otherDiv = '<div style="word-break:break-all;text-align: left;margin: 0 10px 0 5px;" >';
+						var myDiv = '<div style="word-break:break-all;text-align: right;margin: 0 10px 0 5px;" >';
+						var closeDiv = '</div>';
+						
+						if(mess[0] === user) {
+							$("message").innerHTML += myDiv + mess[1] + closeDiv;
+						} else {
+							$("message").innerHTML += otherDiv + mess[0] +":"+ "<br/>  &nbsp;&nbsp;" + mess[1] + closeDiv;
+						}
 					}
 				},
 				onsend : function(message) {
@@ -63,6 +85,12 @@
 				} 
 				
 			};
+			
+			//与服务器保持心跳
+			function heartbeat() {
+				roomChat.onsend("heartbeat");
+				t = setTimeout(heartbeat, 15000);
+			}
 			
 			var roomChat;
 			function send() {
@@ -89,8 +117,6 @@
 	<body>
 		<header>简单聊天室......................</header>
 		<div id="message" style="height: 250px;width: 480px;background-color: red;float: left;">
-			<div style="height: 20px;width:90%; border: 1px solid white;" >abc</div>
-			<div style="height: 20px;border: 1px solid white;" >ddsa</div>
 		</div>
 		
 		<div id="room" style="height: 250px;width: 200px;background-color: green;float: left;">
