@@ -5,9 +5,9 @@ import org.apache.commons.lang.ArrayUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-public final class Log {
+public final class L {
 	
-	public static void log(String str, Object... objs) {
+	public static void d(String str, Object... objs) {
 		
 		if(ArrayUtils.isEmpty(objs)) {
 			System.out.println(str);

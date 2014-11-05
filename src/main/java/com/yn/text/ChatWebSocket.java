@@ -10,20 +10,20 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.websocket.WebSocket.OnTextMessage;
 
 import com.yn.util.ChatMessageUtil;
-import com.yn.util.Log;
+import com.yn.util.L;
 
 public class ChatWebSocket implements OnTextMessage{
 	
 	private Connection connection;
 	private String username;
 	public ChatWebSocket(){}
+	
 	public ChatWebSocket(HttpServletRequest request) {
 		this.username = request.getParameter("username");
 	}
 
-	public void onClose(int arg0, String arg1) {
-		
-		Log.log("close", "username="+username, "arg0="+arg0, "arg1="+arg1);
+	public void onClose(int closeCode, String message) {
+		L.d("close", "username="+username, "closeCode="+closeCode, "message="+message);
 		if(StringUtils.isNotBlank(username)) {
 			ChatMessageUtil.getRooms().remove(username);
 		}
@@ -32,7 +32,6 @@ public class ChatWebSocket implements OnTextMessage{
 
 	public void onOpen(Connection con) {
 		connection = con;
-		Log.log("open", username);
 		if(StringUtils.isNotBlank(username)) {
 			ChatMessageUtil.getRooms().put(username, this);
 		}
@@ -43,9 +42,8 @@ public class ChatWebSocket implements OnTextMessage{
 		for(String name : map.keySet()) {
 			sb.append(name).append(",");
 		}
-		Log.log("username", sb);
-		
-		 for(Entry<String, ChatWebSocket> entry : map.entrySet()) {
+
+		for(Entry<String, ChatWebSocket> entry : map.entrySet()) {
 			 ChatWebSocket socket = entry.getValue(); 
 			 socket.sendMessage(StringUtils.chomp(sb.toString(), ","));
 		 }
@@ -54,8 +52,8 @@ public class ChatWebSocket implements OnTextMessage{
 
 	public void onMessage(String message) {
 		
+		//心跳
 		if(message.equals("heartbeat"))  {
-			Log.log("心跳", username);
 			return;
 		}
 		
