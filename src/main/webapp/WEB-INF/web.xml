@@ -4,6 +4,12 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  
+  <filter>
+  	<filter-name></filter-name>
+  	<filter-class></filter-class>
+  </filter>
+  
   <servlet>
     <servlet-name>WSChat</servlet-name>
     <servlet-class>com.yn.websocket.WebSocketChatServlet</servlet-class>
