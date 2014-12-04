@@ -21,7 +21,20 @@ public final class L {
 		}
 	}
 	
+	public static void dr(String str, Object... objs) {
+		
+		if(objs.length == 1) {
+			System.err.println(str + ":" + JSONObject.toJSONString(objs[0], features));
+		} else {
+			System.err.println(str + ":" +JSONArray.toJSONString(objs, features));
+		}
+	}
+	
 	public static void d(Object obj) {
 		System.out.println(JSONObject.toJSONString(obj, features));
+	}
+	
+	public static void dr(Object obj) {
+		System.err.println(JSONObject.toJSONString(obj, features));
 	}
 }

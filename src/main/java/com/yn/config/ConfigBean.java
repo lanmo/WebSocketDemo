@@ -1,5 +1,6 @@
 package com.yn.config;
 
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.configuration.CompositeConfiguration;
@@ -9,15 +10,17 @@ import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
+import com.yn.util.L;
+
 /**
  * 属性注入
  * @author yangnan
  *
  */
 @Component
-public class PropertyConfigBean implements InitializingBean, FactoryBean<Object> {
+public class ConfigBean implements InitializingBean, FactoryBean<Object> {
 
-	private Configuration[] configurations;
+	private Map<String, Configuration> map;
 	
 	private CompositeConfiguration compositeConfiguration;
 	
@@ -38,12 +41,12 @@ public class PropertyConfigBean implements InitializingBean, FactoryBean<Object>
 			compositeConfiguration = new CompositeConfiguration();
 		}
 		
-		String envType = System.getProperty(profile);
-		if("local".equals(envType.trim())) {
-			compositeConfiguration.addConfiguration(configurations[0]);
-		} else if("test".equals(envType.trim())) {
-			compositeConfiguration.addConfiguration(configurations[0]);
-		}
+		String envType = System.getProperty(profile, "local");
+		L.dr("当前运行环境............................"+envType);
+		
+		Configuration configuration = map.get(envType.trim());
+		compositeConfiguration.addConfiguration(configuration);
+		
 	}
 	
 	public Object getObject() throws Exception {

@@ -1,4 +1,4 @@
-package com.yn.interceptor;
+package com.yn.interceptors;
 
 import java.lang.reflect.Field;
 
@@ -11,20 +11,20 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.ReflectionUtils.FieldCallback;
 
 import com.yn.annotation.PropertyConfig;
-import com.yn.config.PropertyConfigBean;
+import com.yn.config.ConfigBean;
 
 @Component
 public class PropertyProcessInterceptor extends InstantiationAwareBeanPostProcessorAdapter {
 
 	@Autowired
-	private PropertyConfigBean configBean;
+	private ConfigBean configBean;
 	
 	private SimpleTypeConverter convert = new SimpleTypeConverter();
 	
 	public Object postProcessBeforeInitialization(Object bean, String beanName)
 			throws BeansException {
 		
-		if("appConstants".equals(beanName)) {
+		if("appConfig".equals(beanName)) {
 			findPropertyAutowireValue(bean, beanName);
 		}
 		
