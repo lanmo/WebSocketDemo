@@ -16,7 +16,7 @@ public class ClientWebSocket implements OnTextMessage {
 		try {
 			connection.sendMessage("我是terminal");
 		} catch (IOException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 

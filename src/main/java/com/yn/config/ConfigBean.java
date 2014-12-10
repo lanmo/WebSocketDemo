@@ -8,7 +8,6 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationConverter;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.stereotype.Component;
 
 import com.yn.util.L;
 
@@ -17,7 +16,6 @@ import com.yn.util.L;
  * @author yangnan
  *
  */
-@Component
 public class ConfigBean implements InitializingBean, FactoryBean<Object> {
 
 	private Map<String, Configuration> map;
@@ -55,5 +53,13 @@ public class ConfigBean implements InitializingBean, FactoryBean<Object> {
 	
 	public Object getProperty(String key) {
 		return compositeConfiguration.getProperty(key);
+	}
+
+	public Map<String, Configuration> getMap() {
+		return map;
+	}
+
+	public void setMap(Map<String, Configuration> map) {
+		this.map = map;
 	}
 }

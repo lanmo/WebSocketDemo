@@ -71,28 +71,15 @@
     </dependency>
     
     <dependency>
-	  <groupId>net.paoding</groupId>
-	  <artifactId>rose</artifactId>
-	  <version>1.2-SNAPSHOT</version>
-	</dependency>
-
-	<dependency>
-	  <groupId>net.paoding</groupId>
-	  <artifactId>context</artifactId>
-	  <version>1.2-SNAPSHOT</version>
-	</dependency>
-
-	<dependency>
-	  <groupId>net.paoding</groupId>
-	  <artifactId>jade</artifactId>
-	  <version>1.2-SNAPSHOT</version>
-	</dependency>
-
-	<dependency>
-	  <groupId>net.paoding</groupId>
-	  <artifactId>pipe</artifactId>
-	  <version>1.2-SNAPSHOT</version>
-	</dependency>
+    	<groupId>net.paoding</groupId>
+    	<artifactId>paoding-rose</artifactId>
+    	<version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+    	<groupId>net.paoding</groupId>
+    	<artifactId>paoding-rose-context</artifactId>
+    	<version>1.0-SNAPSHOT</version>
+    </dependency>
 	
 	<dependency>
             <groupId>org.springframework</groupId>
@@ -147,8 +134,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.6</source>
+                    <target>1.6</target>
                     <verbose>true</verbose>
                     <encoding>UTF-8</encoding>
                     <compilerArguments>

@@ -1,5 +1,4 @@
 package com.yn.test.compoment;
-
 /**
  * Copyright (C), nanyang205380@sohu-inc.com.
  * @ClassName: BaseTestController   
@@ -8,5 +7,4 @@ package com.yn.test.compoment;
  * @date 2014年12月4日 下午6:24:44 
  */
 public class BaseTestController {
-
 }
